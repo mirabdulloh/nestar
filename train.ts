@@ -1,19 +1,43 @@
 // Task ZJ
 
-import { count } from "console";
+import { count, log } from 'console';
+import { retry } from 'rxjs';
 
-function reduceNestedArray(arr:any[]){
+// import { count } from "console";
+
+// function reduceNestedArray(arr:any[]){
+//     let count = 0;
+
+//     for(let i=0;i<arr.length; i++){
+//         if (Array.isArray(arr[i])) {
+//             count += reduceNestedArray(arr[i]);
+//           } else {
+//             count += arr[i];
+//           }
+
+//     }
+//     return count
+// }
+
+// console.log(reduceNestedArray([1, [1, 2, [4]]]));
+
+// Task ZK
+ 
+function delayHelloWorld(limit: number): Promise<number> {
     let count = 0;
-
-    for(let i=0;i<arr.length; i++){
-        if (Array.isArray(arr[i])) {
-            count += reduceNestedArray(arr[i]);
-          } else {
-            count += arr[i];
-          }
+  
+    return new Promise((resolve) => {
+      const id = setInterval(() => {
+        count++;
+        console.log(`${count === limit ? " " : count }`);
         
-    }
-    return count
-}
-
-console.log(reduceNestedArray([1, [1, 2, [4]]]));
+        if (count === limit) {
+          clearInterval(id);
+          resolve(count);
+        }
+      }, 1000);
+    });
+  }
+  
+  delayHelloWorld(5).then(console.log);
+  
