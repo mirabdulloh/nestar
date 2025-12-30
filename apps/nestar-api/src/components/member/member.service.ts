@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Member } from '../../libs/dto/member/member';
@@ -23,7 +23,7 @@ export class MemberService {
 
 	public async login(input: LoginInput): Promise<Member> {
 		const { memberNick, memberPassword } = input;
-		const response = await this.memberModel.findOne({ memberNick }).select('+memberPassword').exec();
+		const response: Member = await this.memberModel.findOne({ memberNick }).select('+memberPassword').exec();
 
 		if (!response || response.memberStatus === MemberStatus.DELETE) {
 			throw new InternalServerErrorException(Message.NO_MEMBER_NICK);
@@ -32,10 +32,10 @@ export class MemberService {
 		}
 
 		// TODO: compare passwords
-        console.log("response: ",response.memberPassword);
-        
+		console.log('response: ', response.memberPassword);
+
 		const isMatch = memberPassword === response.memberPassword;
-		if (!isMatch) throw new InternalServerErrorException(Message.WRONG_PASSWORD);
+		if (!isMatch) throw new ForbiddenException(Message.WRONG_PASSWORD);
 		return response;
 	}
 
