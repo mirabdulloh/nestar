@@ -98,4 +98,3 @@ const MemberSchema = new Schema(
 );
 
 export default MemberSchema;
-
