@@ -23,21 +23,29 @@ import { retry } from 'rxjs';
 
 // Task ZK
  
-function delayHelloWorld(limit: number): Promise<number> {
-    let count = 0;
+// function delayHelloWorld(limit: number): Promise<number> {
+//     let count = 0;
   
-    return new Promise((resolve) => {
-      const id = setInterval(() => {
-        count++;
-        console.log(`${count === limit ? " " : count }`);
+//     return new Promise((resolve) => {
+//       const id = setInterval(() => {
+//         count++;
+//         console.log(`${count === limit ? " " : count }`);
         
-        if (count === limit) {
-          clearInterval(id);
-          resolve(count);
-        }
-      }, 1000);
-    });
-  }
+//         if (count === limit) {
+//           clearInterval(id);
+//           resolve(count);
+//         }
+//       }, 1000);
+//     });
+//   }
   
-  delayHelloWorld(5).then(console.log);
+//   delayHelloWorld(5).then(console.log);
+
+// Task ZL 
+
+function stringToKebab(str:string):string{
+  return str.trim().toLowerCase().replace(/\s+/g, '-');
+}
+console.log(stringToKebab("I love Kebab"));
+
   
