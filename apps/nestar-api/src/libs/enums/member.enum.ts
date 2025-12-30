@@ -5,7 +5,6 @@ export enum MemberType {
 	ADMIN = 'ADMIN',
 }
 registerEnumType(MemberType, { name: 'MemberType' });
-registerEnumType(MemberType, { name: '' });
 
 export enum MemberStatus {
 	ACTIVE = 'ACTIVE',
