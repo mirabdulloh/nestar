@@ -32,7 +32,6 @@ export class MemberService {
 		}
 
 		// TODO: compare passwords
-		console.log('response: ', response.memberPassword);
 
 		const isMatch = memberPassword === response.memberPassword;
 		if (!isMatch) throw new ForbiddenException(Message.WRONG_PASSWORD);
