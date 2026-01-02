@@ -1,8 +1,10 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { MemberService } from './member.service';
-import {} from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { LoginInput, MemberInput } from '../../libs/dto/member/member.input';
 import { Member } from '../../libs/dto/member/member';
+import { AuthGuard } from '../auth/guards/auth.guard';
+import { AuthMember } from '../auth/decorators/authMember.decorator';
 
 @Resolver()
 export class MemberResolver {
@@ -23,11 +25,23 @@ export class MemberResolver {
 		return this.memberService.login(input);
 	}
 
-	// Authenticated 
+	// Authenticated
+	@UseGuards(AuthGuard)
 	@Mutation(() => String)
-	public async updateMember(): Promise<string> {
+	public async updateMember(@AuthMember('_id') memberId: Member): Promise<string> {
 		console.log('Mutation: updateMember');
+		console.log('AuthMember =>', memberId);
+
 		return this.memberService.updateMember();
+	}
+
+	@UseGuards(AuthGuard)
+	@Query(() => String)
+	public async checkAuth(@AuthMember('memberNick') memberNick: Member): Promise<string> {
+		console.log('Query: checkAuth');
+		console.log('AuthMember =>', memberNick);
+
+		return `Hi ${memberNick}`;
 	}
 
 	@Query(() => String)
