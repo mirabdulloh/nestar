@@ -5,15 +5,22 @@ import { Member } from '../../libs/dto/member/member';
 import { LoginInput, MemberInput } from '../../libs/dto/member/member.input';
 import { MemberStatus } from '../../libs/enums/member.enum';
 import { Message } from '../../libs/enums/common.enum';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class MemberService {
-	constructor(@InjectModel('Member') private readonly memberModel: Model<Member>) {}
+	constructor(
+		@InjectModel('Member') private readonly memberModel: Model<Member>,
+		private authService: AuthService,
+	) {}
 	public async signup(input: MemberInput): Promise<Member> {
-		// TODO: password hash
+		// Password Hashed
+		input.memberPassword = await this.authService.hashPassword(input.memberPassword);
 		try {
 			const result = await this.memberModel.create(input);
 			// Authentication via token
+			result.accessToken = await this.authService.createToken(result);
+			console.log('accessToken =>,', result);
 			return result;
 		} catch (err) {
 			console.log('Error on SignUP Service', err.message);
@@ -22,7 +29,7 @@ export class MemberService {
 	}
 
 	public async login(input: LoginInput): Promise<Member> {
-		const { memberNick, memberPassword } = input;
+		const { memberNick } = input;
 		const response: Member = await this.memberModel.findOne({ memberNick }).select('+memberPassword').exec();
 
 		if (!response || response.memberStatus === MemberStatus.DELETE) {
@@ -31,10 +38,10 @@ export class MemberService {
 			throw new InternalServerErrorException(Message.BLOCKED_USER);
 		}
 
-		// TODO: compare passwords
-
-		const isMatch = memberPassword === response.memberPassword;
+		const isMatch = await this.authService.comparePasswords(input.memberPassword, response.memberPassword);
 		if (!isMatch) throw new ForbiddenException(Message.WRONG_PASSWORD);
+		response.accessToken = await this.authService.createToken(response);
+
 		return response;
 	}
 

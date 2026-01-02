@@ -18,15 +18,14 @@ export class MemberInput {
 	@Field(() => String)
 	memberPhone: string;
 
-    @IsOptional()
-    @Field(()=> MemberType, {nullable: true})
-    memberType?:MemberType
+	@IsOptional()
+	@Field(() => MemberType, { nullable: true })
+	memberType?: MemberType;
 
-    @IsOptional()
-    @Field(()=> MemberAuthType, {nullable: true})
-    memberAuthType?:MemberAuthType
+	@IsOptional()
+	@Field(() => MemberAuthType, { nullable: true })
+	memberAuthType?: MemberAuthType;
 }
-
 
 @InputType()
 export class LoginInput {

@@ -16,9 +16,8 @@ export class DatabaseModule {
 	constructor(@InjectConnection() private readonly connection: Connection) {
 		if (connection.readyState === 1) {
 			console.log(`Mongo DB connected into ${process.env.NODE_ENV === 'production' ? 'production' : 'development'}`);
-		}else{
-            console.log("MongoDB is not connected!");
-            
-        }
+		} else {
+			console.log('MongoDB is not connected!');
+		}
 	}
 }
