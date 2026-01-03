@@ -5,6 +5,9 @@ import { LoginInput, MemberInput } from '../../libs/dto/member/member.input';
 import { Member } from '../../libs/dto/member/member';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { AuthMember } from '../auth/decorators/authMember.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { MemberType } from '../../libs/enums/member.enum';
+import { RolesGuard } from '../auth/guards/roles.guard';
 
 @Resolver()
 export class MemberResolver {
@@ -44,6 +47,14 @@ export class MemberResolver {
 		return `Hi ${memberNick}`;
 	}
 
+	@Roles(MemberType.USER, MemberType.AGENT)
+	@UseGuards(RolesGuard)
+	@Query(() => String)
+	public async checkAuthRoles(@AuthMember() authMember: Member): Promise<string> {
+		console.log('Query: checkAuthRoles');
+		return `Hi ${authMember.memberNick}, you are ${authMember.memberType} (memberID ${authMember._id})`;
+	}
+
 	@Query(() => String)
 	public async getMember(): Promise<string> {
 		console.log('Query: getMember');
@@ -52,9 +63,13 @@ export class MemberResolver {
 
 	/** ADMIN */
 	// Authorization: ADMIN
+	@Roles(MemberType.ADMIN)
+	@UseGuards(RolesGuard)
 	@Mutation(() => String)
-	public async getMemberByAdmin(): Promise<string> {
+	public async getMemberByAdmin(@AuthMember() authMember: Member): Promise<string> {
 		console.log('Query: getMemberByAdmin');
+		console.log('authMember.MemberType =>', authMember.memberType);
+
 		return this.memberService.getMemberByAdmin();
 	}
 
