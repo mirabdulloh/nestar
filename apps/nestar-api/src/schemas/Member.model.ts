@@ -50,7 +50,7 @@ const MemberSchema = new Schema(
 			type: Number,
 			default: 0,
 		},
-		memberArticle: {
+		memberArticles: {
 			type: Number,
 			default: 0,
 		},
