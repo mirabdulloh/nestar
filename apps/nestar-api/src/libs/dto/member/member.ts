@@ -39,8 +39,8 @@ export class Member {
 	@Field(() => Int)
 	memberProperties: number;
 
-	@Field(() => Int)
-	memberArticles: number;
+	@Field(() => Int, { nullable: true })
+	memberArticles?: number;
 
 	@Field(() => Int)
 	memberFollowers: number;
