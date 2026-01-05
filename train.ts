@@ -46,8 +46,25 @@
 
 // Task ZM
 
-function reverseInteger(num: number) {
-	return num.toString().split('').reverse().join();
+// function reverseInteger(num: number) {
+// 	return num.toString().split('').reverse().join();
+// }
+
+// console.log(reverseInteger(1245666778899));
+
+// Task ZO
+function areParenthesesBalanced(str: string): boolean {
+	let balance = 0;
+
+	for (const ch of str) {
+		if (ch === '(') balance++;
+		else if (ch === ')') {
+			balance--;
+			if (balance < 0) return false;
+		}
+	}
+
+	return balance === 0;
 }
 
-console.log(reverseInteger(1245666778899));
+console.log(areParenthesesBalanced('string(ichida(qavslar)soni()balansda'));
