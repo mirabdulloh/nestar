@@ -2,7 +2,7 @@ import { BadRequestException, ForbiddenException, Injectable, InternalServerErro
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
 import { Member, Members } from '../../libs/dto/member/member';
-import { AgentInquiry, LoginInput, MemberInput } from '../../libs/dto/member/member.input';
+import { AgentInquiry, LoginInput, MemberInput, MembersInquiry } from '../../libs/dto/member/member.input';
 import { MemberStatus, MemberType } from '../../libs/enums/member.enum';
 import { Direction, Message } from '../../libs/enums/common.enum';
 import { AuthService } from '../auth/auth.service';
@@ -114,11 +114,36 @@ export class MemberService {
 	}
 
 	/** ADMIN */
-	public async getMemberByAdmin(): Promise<string> {
-		return 'getMember executed!';
+	public async getMembersByAdmin(input: MembersInquiry): Promise<Members> {
+		console.log('MemberService: getAgents');
+		const { memberStatus, memberType, text } = input.search;
+		const match: T = {};
+		const sort: T = { [input?.sort ?? 'createdAt']: input?.direction ?? Direction.DESC };
+		if (memberStatus) match.memberStatus = memberStatus;
+		if (memberType) match.memberType = memberType;
+		if (text) match.memberNick = { $regex: new RegExp(text, 'i') };
+		console.log('match =>', match);
+
+		const result = await this.memberModel.aggregate([
+			{ $match: match },
+			{ $sort: sort },
+			{
+				$facet: {
+					list: [{ $skip: (input.page - 1) * input.limit }, { $limit: input.limit }],
+					metaCounter: [{ $count: 'total' }],
+				},
+			},
+		]);
+		console.log('getAgents Result =>', result);
+		if (!result.length) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
+		return result[0];
 	}
 
-	public async updateMemberByAdmin(): Promise<string> {
-		return 'updateMember executed!';
+	public async updateMemberByAdmin(input: MemberUpdate): Promise<Member> {
+		const result = await this.memberModel.findOneAndUpdate({ _id: input._id }, input, { new: true }).exec();
+		if (!result) {
+			throw new InternalServerErrorException(Message.UPDATE_FAILED);
+		}
+		return result;
 	}
 }
