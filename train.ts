@@ -53,18 +53,36 @@
 // console.log(reverseInteger(1245666778899));
 
 // Task ZO
-function areParenthesesBalanced(str: string): boolean {
-	let balance = 0;
+// function areParenthesesBalanced(str: string): boolean {
+// 	let balance = 0;
 
-	for (const ch of str) {
-		if (ch === '(') balance++;
-		else if (ch === ')') {
-			balance--;
-			if (balance < 0) return false;
+// 	for (const ch of str) {
+// 		if (ch === '(') balance++;
+// 		else if (ch === ')') {
+// 			balance--;
+// 			if (balance < 0) return false;
+// 		}
+// 	}
+
+// 	return balance === 0;
+// }
+
+// console.log(areParenthesesBalanced('string(ichida(qavslar)soni()balansda'));
+
+// Task ZP
+
+function countNumberAndLetters(str: string): string {
+	let letter = 0;
+	let number = 0;
+	for (let i = 0; i < str.length; i++) {
+		const ch = str[i];
+		if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
+			letter++;
+		} else if (ch >= '0' && ch <= '9') {
+			number++;
 		}
 	}
-
-	return balance === 0;
+	return `Letters: ${letter}, Numbers: ${number}`;
 }
 
-console.log(areParenthesesBalanced('string(ichida(qavslar)soni()balansda'));
+console.log(countNumberAndLetters('Hello World! 1234 @#2$%'));
