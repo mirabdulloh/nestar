@@ -98,7 +98,7 @@ export class MemberResolver {
 		return await this.memberService.updateMemberByAdmin(input);
 	}
 
-	/**  IMAGE UPLOADER (member.resolver.ts)*/
+	/** IMAGE UPLOADER (member.resolver.ts) */
 
 	@UseGuards(AuthGuard)
 	@Mutation(() => String)
@@ -138,7 +138,7 @@ export class MemberResolver {
 		console.log('Mutation: imagesUploader');
 
 		const uploadedImages = [];
-		const promisedList = files.map(async (img: Promise<FileUpload>, index: number): Promise<Promise<void>> => {
+		const promisedList = files.map(async (img: Promise<FileUpload>, index: number): Promise<void> => {
 			try {
 				const { filename, mimetype, createReadStream } = await img;
 
