@@ -184,6 +184,36 @@ export class PropertyService {
 		}
 		return result[0];
 	}
+
+	public async updatePropertyByAdmin(input: PropertyUpdate): Promise<Property> {
+		const { propertyStatus } = input;
+		let { soldAt, deletedAt } = input;
+		const search: T = {
+			_id: input._id,
+			propertyStatus: PropertyStatus.ACTIVE,
+		};
+
+		if (propertyStatus === PropertyStatus.SOLD) soldAt = moment().toDate();
+		if (propertyStatus === PropertyStatus.DELETE) deletedAt = moment().toDate();
+
+		const result = await this.propertyModel.findOneAndUpdate(search, input, { new: true }).exec();
+		if (!result) throw new InternalServerErrorException(Message.UPDATE_FAILED);
+
+		if (soldAt || deletedAt) {
+			await this.memberService.memberStatsEdits({ _id: result.memberId, targetKey: 'memberProperties', modifier: -1 });
+		}
+		return result;
+	}
+
+	public async removePropertyByAdmin(propertyId: ObjectId): Promise<Property> {
+		const search: T = {
+			_id: propertyId,
+			propertyStatus: PropertyStatus.DELETE,
+		};
+		const result = await this.propertyModel.findOneAndDelete(search).exec();
+		if (!result) throw new InternalServerErrorException(Message.REMOVE_FAILED);
+		return result;
+	}
 	private shapeMatchQuery(match: T, input: PropertiesInquiry) {
 		const {
 			memberId,
