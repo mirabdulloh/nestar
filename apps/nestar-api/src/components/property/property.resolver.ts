@@ -59,7 +59,7 @@ export class PropertyResolver {
 	@UseGuards(WithoutGuard)
 	@Query(() => Properties)
 	public async getProperties(
-		@Args('propertyId') input: PropertiesInquiry,
+		@Args('input') input: PropertiesInquiry,
 		@AuthMember('_id') memberId: ObjectId,
 	): Promise<Properties> {
 		console.log('Query: getProperties');
@@ -70,7 +70,7 @@ export class PropertyResolver {
 	@UseGuards(RolesGuard)
 	@Query(() => Properties)
 	public async getAgentProperties(
-		@Args('propertyId') input: AgentPropertiesInquiry,
+		@Args('input') input: AgentPropertiesInquiry,
 		@AuthMember('_id') memberId: ObjectId,
 	): Promise<Properties> {
 		console.log('Query: getAgentProperties');
