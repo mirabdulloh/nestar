@@ -1,4 +1,23 @@
 import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
+import { BoardArticleResolver } from './board-article.resolver';
+import { BoardArticleService } from './board-article.service';
+import { AuthModule } from '../auth/auth.module';
+import { MemberModule } from '../member/member.module';
+import BoardArticleSchema from '../../schemas/BoardArticle.model';
 
-@Module({})
+@Module({
+	imports: [
+		MongooseModule.forFeature([
+			{
+				name: 'BoardArticle',
+				schema: BoardArticleSchema,
+			},
+		]),
+		AuthModule,
+		MemberModule,
+	],
+	providers: [BoardArticleResolver, BoardArticleService],
+	exports: [BoardArticleService],
+})
 export class BoardArticleModule {}
