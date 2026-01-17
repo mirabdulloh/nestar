@@ -107,10 +107,17 @@
 
 // Task ZR
 
-function areArraysEqual(arr: number[], arr2: number[]): boolean {
-	for (const x of arr) {
-		if (!arr2.includes(x)) return false;
-	}
-	return true;
+// function areArraysEqual(arr: number[], arr2: number[]): boolean {
+// 	for (const x of arr) {
+// 		if (!arr2.includes(x)) return false;
+// 	}
+// 	return true;
+// }
+// console.log(areArraysEqual([1, 2, 3, 4], [3, 1, 2]));
+
+// Task ZS
+function singleNumber(arr: number[]): number[] {
+	const single = arr.filter((num) => arr.indexOf(num) === arr.lastIndexOf(num));
+	return single;
 }
-console.log(areArraysEqual([1, 2, 3, 4], [3, 1, 2]));
+console.log(singleNumber([1, 2, 2, 3, 4]));
