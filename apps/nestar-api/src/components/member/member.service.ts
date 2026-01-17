@@ -65,7 +65,7 @@ export class MemberService {
 		result.accessToken = await this.authService.createToken(result);
 		return result;
 	}
-	public async getMember(memberId: ObjectId, targetId: ObjectId): Promise<Member> {
+	public async getMember(memberId: ObjectId | null, targetId: ObjectId): Promise<Member> {
 		const search: T = {
 			_id: targetId,
 			memberStatus: {
@@ -89,6 +89,10 @@ export class MemberService {
 
 				targetMember.memberViews++;
 			}
+			//! MeLIked
+			const likeInput = { memberId, likeRefId: targetId, likeGroup: LikeGroup.MEMBER };
+			targetMember.meLiked = await this.likeService.checkLikeExistence(likeInput);
+			//! MeFollowed
 		}
 
 		return targetMember;

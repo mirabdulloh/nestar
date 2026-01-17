@@ -38,7 +38,7 @@ export class PropertyResolver {
 	@Query(() => Property)
 	public async getProperty(
 		@Args('propertyId') input: string,
-		@AuthMember('_id') memberId: ObjectId,
+		@AuthMember('_id') memberId: ObjectId | null,
 	): Promise<Property> {
 		console.log('Query: getProperty');
 		const propertyId = shapeIntoMongoObjectId(input);
