@@ -36,7 +36,7 @@ export const lookupAuthMemberLiked = (memberId: T, targetRefId: string = '_id') 
 		$lookup: {
 			from: 'likes',
 			let: {
-				localLikeRefId: `$${targetRefId}`,
+				localLikeRefId: targetRefId.startsWith('$') ? targetRefId : `$${targetRefId}`,
 				localMemberId: memberId,
 				localMyFavorite: true,
 			},
