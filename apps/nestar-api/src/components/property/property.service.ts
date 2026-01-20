@@ -51,8 +51,6 @@ export class PropertyService {
 		};
 
 		const targetProperty = await this.propertyModel.findById(search).lean().exec();
-		console.log('byId?', !!targetProperty);
-		console.log('dbStatus raw:', JSON.stringify(targetProperty?.propertyStatus));
 		if (!targetProperty) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
 
 		if (memberId) {
@@ -130,6 +128,9 @@ export class PropertyService {
 
 	public async getFavorites(memberId: ObjectId, input: OrdinaryInquiry): Promise<Properties> {
 		return await this.likeService.getFavoriteProperties(memberId, input);
+	}
+	public async getVisited(memberId: ObjectId, input: OrdinaryInquiry): Promise<Properties> {
+		return await this.viewService.getVisitedProperties(memberId, input);
 	}
 
 	public async getAgentProperties(memberId: ObjectId, input: AgentPropertiesInquiry): Promise<Properties> {
