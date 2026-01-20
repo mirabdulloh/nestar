@@ -116,8 +116,25 @@
 // console.log(areArraysEqual([1, 2, 3, 4], [3, 1, 2]));
 
 // Task ZS
-function singleNumber(arr: number[]): number[] {
-	const single = arr.filter((num) => arr.indexOf(num) === arr.lastIndexOf(num));
-	return single;
+// function singleNumber(arr: number[]): number[] {
+// 	const single = arr.filter((num) => arr.indexOf(num) === arr.lastIndexOf(num));
+// 	return single;
+// }
+// console.log(singleNumber([1, 2, 2, 3, 4]));
+
+// Task ZT
+
+function firstUniqueCharIndex(str: string): number {
+	const charCount = new Map();
+
+	for (const char of str) {
+		charCount.set(char, (charCount.get(char) || 0) + 1);
+	}
+	for (let i = 0; i < str.length; i++) {
+		if (charCount.get(str[i]) === 1) {
+			return i;
+		}
+	}
 }
-console.log(singleNumber([1, 2, 2, 3, 4]));
+
+console.log(firstUniqueCharIndex('writing a code is a best thing'));
