@@ -4,7 +4,12 @@ import { Follower, Followers, Following, Followings } from '../../libs/dto/follo
 import { MemberService } from '../member/member.service';
 import { InjectModel } from '@nestjs/mongoose';
 import { Direction, Message } from '../../libs/enums/common.enum';
-import { lookupAuthMemberLiked, lookupFollowerData, lookupFollowingData } from '../../libs/config';
+import {
+	lookupAuthMemberFollowed,
+	lookupAuthMemberLiked,
+	lookupFollowerData,
+	lookupFollowingData,
+} from '../../libs/config';
 import { T } from '../../libs/types/common';
 import { FollowInquiry } from '../../libs/dto/follow/follow.input';
 
@@ -81,8 +86,13 @@ export class FollowService {
 							{
 								$limit: limit,
 							},
+							// ! MeLiked
 							lookupAuthMemberLiked(memberId, '$followingId'),
-							// meFollowed
+							//!  meFollowed
+							lookupAuthMemberFollowed({
+								followerId: memberId,
+								followingId: '$followingId',
+							}),
 							lookupFollowingData,
 							{
 								$unwind: '$followingData',
@@ -114,9 +124,13 @@ export class FollowService {
 						list: [
 							{ $skip: (page - 1) * limit },
 							{ $limit: limit },
-							// meLiked
+							//! meLiked
 							lookupAuthMemberLiked(memberId, '$followerId'),
-							// meFollowed
+							//! meFollowed
+							lookupAuthMemberFollowed({
+								followerId: memberId,
+								followingId: '$followerId',
+							}),
 							lookupFollowerData,
 							{
 								$unwind: { path: '$followerData', preserveNullAndEmptyArrays: true },
