@@ -16,7 +16,7 @@ import { ViewService } from '../view/view.service';
 import { ViewGroup } from '../../libs/enums/view.enum';
 import * as moment from 'moment';
 import { PropertyUpdate } from '../../libs/dto/property/property.update';
-import { lookupMember, shapeIntoMongoObjectId } from '../../libs/config';
+import { lookupAuthMemberLiked, lookupMember, shapeIntoMongoObjectId } from '../../libs/config';
 import { LikeGroup } from '../../libs/enums/like.enum';
 import { LikeService } from '../like/like.service';
 import { LikeInput } from '../../libs/dto/like/like.input';
@@ -44,12 +44,12 @@ export class PropertyService {
 	}
 
 	public async getProperty(memberId: ObjectId | null, propertyId: ObjectId): Promise<Property> {
-		// const search: T = {
-		// 	_id: propertyId,
-		// 	propertyStatus: PropertyStatus.ACTIVE,
-		// };
+		const search: T = {
+			_id: propertyId,
+			propertyStatus: PropertyStatus.ACTIVE,
+		};
 
-		const targetProperty = await this.propertyModel.findById(propertyId).lean().exec();
+		const targetProperty = await this.propertyModel.findById(search).lean().exec();
 		console.log('byId?', !!targetProperty);
 		console.log('dbStatus raw:', JSON.stringify(targetProperty?.propertyStatus));
 		if (!targetProperty) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
@@ -112,7 +112,7 @@ export class PropertyService {
 						list: [
 							{ $skip: (input.page - 1) * input.limit },
 							{ $limit: input.limit },
-							// TODO: me liked
+							lookupAuthMemberLiked(memberId),
 							lookupMember,
 							{ $unwind: { path: '$memberData', preserveNullAndEmptyArrays: true } },
 						],
