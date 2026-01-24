@@ -124,17 +124,27 @@
 
 // Task ZT
 
-function firstUniqueCharIndex(str: string): number {
-	const charCount = new Map();
+// function firstUniqueCharIndex(str: string): number {
+// 	const charCount = new Map();
 
-	for (const char of str) {
-		charCount.set(char, (charCount.get(char) || 0) + 1);
-	}
-	for (let i = 0; i < str.length; i++) {
-		if (charCount.get(str[i]) === 1) {
-			return i;
-		}
-	}
+// 	for (const char of str) {
+// 		charCount.set(char, (charCount.get(char) || 0) + 1);
+// 	}
+// 	for (let i = 0; i < str.length; i++) {
+// 		if (charCount.get(str[i]) === 1) {
+// 			return i;
+// 		}
+// 	}
+// }
+
+// console.log(firstUniqueCharIndex('writing a code is a best thing'));
+
+// Task ZU
+
+function sumOfUnique(arr: number[]) {
+	const unique = arr.filter((num) => arr.indexOf(num) === arr.lastIndexOf(num));
+	const sum = unique.slice().reduce((a, b) => Number(a) + Number(b), 0);
+	return sum;
 }
 
-console.log(firstUniqueCharIndex('writing a code is a best thing'));
+console.log(sumOfUnique([1, 2, 2, 3, 4, 7, 8, 8]));
