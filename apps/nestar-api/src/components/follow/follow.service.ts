@@ -95,7 +95,7 @@ export class FollowService {
 							}),
 							lookupFollowingData,
 							{
-								$unwind: '$followingData',
+								$unwind: { path: '$followingData', preserveNullAndEmptyArrays: true },
 							},
 						],
 						metaCounter: [
